@@ -3,24 +3,48 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   Post,
   Put,
 } from '@nestjs/common';
 
-import { CreateOrganizationDto } from './dto/create-organization.dto';
+import {
+  CreateOrganizationDto,
+  OrganizationUserDto,
+} from './dto/create-organization.dto';
 import { UpdateOrganizationDto } from './dto/update-organization.dto';
+import { OrganizationsService } from './organizations.service';
 
 @Controller('organizations')
 export class OrganizationsController {
+  constructor(private orgService: OrganizationsService) {}
   @Get()
   getOrganizations() {
-    return [];
+    return this.orgService.getOrganizations();
+  }
+
+  @Get(':id')
+  getOrganizationById(@Param('id') id: string) {
+    return this.orgService.getOrganizationById(id);
+  }
+
+  @Get(':id/users')
+  getOrganizationUsers(@Param('id') id: string) {
+    return this.orgService.getOrganizationUsers(id);
   }
 
   @Post()
   createOrganization(@Body() createOrgDto: CreateOrganizationDto) {
-    return { createOrgDto };
+    return this.orgService.createOrganization(createOrgDto);
+  }
+
+  @Post('/user')
+  addUserToOrganization(
+    @Body() { org_id, user_id, role }: OrganizationUserDto,
+  ) {
+    return this.orgService.addUserToOrganization(user_id, org_id, role);
   }
 
   @Put(':id')
@@ -28,11 +52,12 @@ export class OrganizationsController {
     @Param('id') id: string,
     @Body() updateOrgDto: UpdateOrganizationDto,
   ) {
-    return { updateOrgDto };
+    return this.orgService.updateOrganization(id, updateOrgDto);
   }
 
   @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
   deleteOrganization(@Param('id') id: string) {
-    return {};
+    return this.orgService.deleteOrganization(id);
   }
 }
