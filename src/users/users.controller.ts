@@ -3,11 +3,13 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   Post,
   Put,
 } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateUserDto, UserRoles } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
 
@@ -16,15 +18,17 @@ export class UsersController {
   constructor(private userService: UsersService) {}
   @Get()
   getUsers() {
-    return [];
+    return this.userService.getUsers();
   }
 
   @Post()
+  @HttpCode(HttpStatus.CREATED)
   createUser(@Body() createUserDto: CreateUserDto) {
-    return { createUserDto };
+    return this.userService.createUser(createUserDto);
   }
 
   @Put(':id')
+  @HttpCode(HttpStatus.CREATED)
   async updateUser(
     @Param('id') id: string,
     @Body() updateProjectDto: UpdateUserDto,
