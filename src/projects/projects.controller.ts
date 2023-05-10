@@ -16,6 +16,11 @@ import { UpdateProjectDto } from './dto/update-project.dto';
 export class ProjectsController {
   constructor(private projectService: ProjectsService) {}
 
+  @Get()
+  async getAllProjects() {
+    return this.projectService.getAllProjects();
+  }
+
   @Get(':organizationId')
   async getProjectsByOrganization(@Param('organizationId') id: string) {
     return { id };
