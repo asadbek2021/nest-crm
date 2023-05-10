@@ -9,8 +9,8 @@ export class CreateTaskDto {
   doneAt: Date;
 }
 
-const enum TaskStatus {
-  CREATED,
-  IN_PROCESS,
-  DONE,
+export const enum TaskStatus {
+  CREATED = 'CREATED',
+  IN_PROCESS = 'IN_PROCESS',
+  DONE = 'DONE',
 }

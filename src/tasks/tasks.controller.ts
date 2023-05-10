@@ -3,6 +3,8 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   Post,
   Put,
@@ -15,8 +17,23 @@ import { TasksService } from './tasks.service';
 export class TasksController {
   constructor(private taskService: TasksService) {}
   @Get()
-  getTasksByWorker() {
-    return [];
+  getAllTasks() {
+    return this.taskService.getTasks();
+  }
+
+  @Get(':id')
+  getTaskById(@Param('id') id: string) {
+    return this.taskService.getTaskById(id);
+  }
+
+  @Get('/worker/:id')
+  getWorkerTasks(@Param('id') id: string) {
+    return this.taskService.getWorkerTasks(id);
+  }
+
+  @Get('/project/:id')
+  getTasksByProject(@Param('id') id: string) {
+    return this.taskService.getTasksByProject(id);
   }
 
   @Post()
@@ -33,6 +50,7 @@ export class TasksController {
   }
 
   @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
   deleteTask(@Param('id') id: string) {
     return this.taskService.deleteTask(id);
   }
